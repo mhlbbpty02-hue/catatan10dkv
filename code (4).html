@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Class Hub</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; background-color: #e8f5e8; color: #333; margin: 0; padding: 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        header { text-align: center; padding: 30px; background-color: #4caf50; color: white; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        h1 { font-size: 2.5em; margin: 0; }
+        .section { background-color: white; padding: 20px; margin: 20px 0; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .biodata { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+        .member { text-align: center; padding: 15px; background-color: #f1f8e9; border-radius: 10px; width: 150px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .member img { width: 80px; height: 80px; border-radius: 50%; margin-bottom: 10px; border: 2px solid #4caf50; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #4caf50; color: white; }
+        button { background-color: #4caf50; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-size: 14px; }
+        button:hover { background-color: #45a049; }
+        input, select { padding: 8px; margin: 5px; border: 1px solid #ccc; border-radius: 5px; width: 200px; }
+        .admin-only { display: none; }
+        .login-form { text-align: center; margin-bottom: 20px; background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .log { background-color: #f1f8e9; padding: 10px; border-radius: 5px; margin-top: 20px; white-space: pre-line; }
+        .user-view { font-weight: bold; color: #4caf50; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Elite Class Hub</h1>
+        <p>Portal Kelas Unggul untuk Kolaborasi dan Pencatatan</p>
+    </header>
+    <div class="container">
+        <div class="login-form">
+            <input type="text" id="username" placeholder="Username (nama Anda)">
+            <input type="password" id="password" placeholder="Password (hanya untuk Admin)">
+            <button onclick="login()">Login</button>
+            <p id="login-status"></p>
+        </div>
+        <div id="content" style="display: none;">
+            <div class="section">
+                <h2>Biodata Kelas</h2>
+                <div class="biodata">
+                    <div class="member">
+                        <img src="https://via.placeholder.com/80" alt="Labib">
+                        <h3>Labib</h3>
+                        <p>Ketua Kelas (Admin)</p>
+                    </div>
+                    <div class="member">
+                        <img src="https://via.placeholder.com/80" alt="Ulum">
+                        <h3>Ulum</h3>
+                        <p>Wakil Ketua</p>
+                    </div>
+                    <div class="member">
+                        <img src="https://via.placeholder.com/80" alt="Azizah">
+                        <h3>Azizah</h3>
+                        <p>Sekretaris</p>
+                    </div>
+                    <div class="member">
+                        <img src="https://via.placeholder.com/80" alt="Enjel">
+                        <h3>Enjel</h3>
+                        <p>Bendahara</p>
+                    </div>
+                    <div class="member">
+                        <img src="https://via.placeholder.com/80" alt="Naura">
+                        <h3>Naura</h3>
+                        <p>Anggota</p>
+                    </div>
+                    <div class="member">
+                        <img src="https://via.placeholder.com/80" alt="Reva">
+                        <h3>Reva</h3>
+                        <p>Anggota</p>
+                    </div>
+                    <div class="member">
+                        <img src="https://via.placeholder.com/80" alt="Pak Wafi">
+                        <h3>Pak Wafi</h3>
+                        <p>Wali Kelas</p>
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <h2>Absensi Kelas</h2>
+                <p class="user-view">Anda hanya bisa melihat absensi yang sudah dicatat oleh Admin.</p>
+                <div class="admin-only">
+                    <input type="date" id="absen-date">
+                    <select id="absen-name">
+                        <option>Labib</option><option>Ulum</option><option>Azizah</option><option>Enjel</option><option>Naura</option><option>Reva</option>
+                    </select>
+                    <select id="absen-status">
+                        <option>Hadir</option><option>Tidak Hadir</option>
+                    </select>
+                    <button onclick="addAbsen()">Tambah Absensi</button>
+                </div>
+                <table id="absen-table">
+                    <tr><th>Tanggal</th><th>Nama</th><th>Status</th></tr>
+                </table>
+                <div class="admin-only">
+                    <button onclick="printRekap()">Cetak Rekapan untuk Wali Kelas</button>
+                </div>
+            </div>
+            <div class="section">
+                <h2>Pencatatan Uang Kas</h2>
+                <p>Iuran setiap Sabtu dan Selasa.</p>
+                <p class="user-view">Anda hanya bisa melihat status pembayaran yang sudah dicatat oleh Admin.</p>
+                <div class="admin-only">
+                    <input type="date" id="kas-date">
+                    <select id="kas-name">
+                        <option>Labib</option><option>Ulum</option><option>Azizah</option><option>Enjel</option><option>Naura</option><option>Reva</option>
+                    </select>
+                    <select id="kas-status">
+                        <option>Sudah Bayar</option><option>Belum Bayar</option>
+                    </select>
+                    <button onclick="addKas()">Tambah Pencatatan</button>
+                </div>
+                <table id="kas-table">
+                    <tr><th>Tanggal</th><th>Nama</th><th>Status</th></tr>
+                </table>
+            </div>
+            <div class="section admin-only">
+                <h2>Log Login (Admin Only)</h2>
+                <div class="log" id="login-log"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let currentUser = null;
+        const users = {
+            'Labib': { pass: 'pass123', role: 'admin' },
+            'Ulum': { role: 'user' },
+            'Azizah': { role: 'user' },
+            'Enjel': { role: 'user' },
+            'Naura': { role: 'user' },
+            'Reva': { role: 'user' }
+        };
+
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            if (users[username]) {
+                if (users[username].role === 'admin') {
+                    if (users[username].pass === password) {
+                        currentUser = username;
+                        document.getElementById('content').style.display = 'block';
+                        document.getElementById('login-status').textContent = `Login berhasil sebagai Admin ${username}`;
+                        document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
+                        logLogin(username);
+                        loadData();
+                    } else {
+                        document.getElementById('login-status').textContent = 'Password salah untuk Admin!';
+                    }
+                } else {
+                    // User login tanpa password
+                    currentUser = username;
+                    document.getElementById('content').style.display = 'block';
+                    document.getElementById('login-status').textContent = `Login berhasil sebagai ${username}`;
+                    loadData();
+                }
+            } else {
+                document.getElementById('login-status').textContent = 'Username tidak ditemukan!';
+            }
+        }
+
+        function logLogin(user) {
+            const log = localStorage.getItem('loginLog') || '';
+            const newLog = log + `${new Date().toLocaleString()}: ${user} login\n`;
+            localStorage.setItem('loginLog', newLog);
+            document.getElementById('login-log').textContent = newLog;
+        }
+
+        function addAbsen() {
+            if (users[currentUser].role !== 'admin') return;
+            const date = document.getElementById('absen-date').value;
+            const name = document.getElementById('absen-name').value;
+            const status = document.getElementById('absen-status').value;
+            const absen = JSON.parse(localStorage.getItem('absen') || '[]');
+            absen.push({ date, name, status });
+            localStorage.setItem('absen', JSON.stringify(absen));
+            loadData();
+        }
+
+        function addKas() {
+            if (users[currentUser].role !== 'admin') return;
+            const date = document.getElementById('kas-date').value;
+            const name = document.getElementById('kas-name').value;
+            const status = document.getElementById('kas-status').value;
+            const kas = JSON.parse(localStorage.getItem('kas') || '[]');
+            kas.push({ date, name, status });
+            localStorage.setItem('kas', JSON.stringify(kas));
+            loadData();
+        }
+
+        function loadData() {
+            const absen = JSON.parse(localStorage.getItem('absen') || '[]');
+            const kas = JSON.parse(localStorage.getItem('kas') || '[]');
+            const absenTable = document.getElementById('absen-table');
+            const kasTable = document.getElementById('kas-table');
+            absenTable.innerHTML = '<tr><th>Tanggal</th><th>Nama</th><th>Status</th></tr>';
+            kasTable.innerHTML = '<tr><th>Tanggal</th><th>Nama</th><th>Status</th></tr>';
+            absen.forEach(item => {
+                if (users[currentUser].role === 'admin' || item.name === currentUser) {
+                    absenTable.innerHTML += `<tr><td>${item.date}</td><td>${item.name}</td><td>${item.status}</td></tr>`;
+                }
+            });
+            kas.forEach(item => {
+                if (users[currentUser].role === 'admin' || item.name === currentUser) {
+                    kasTable.innerHTML += `<tr><td>${item.date}</td><td>${item.name}</td><td>${item.status}</td></tr>`;
+                }
+            });
+        }
+
+        function printRekap() {
+            window.print(); // Cetak halaman untuk rekapan
+        }
+    </script>
+</body>
+</html>
